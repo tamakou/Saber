@@ -65,12 +65,13 @@ final class SaberEntity {
 
         if !isHeld {
             let distance = simd_length(handPosition - saberWorldPosition)
-            if distance < grabDistance {
+            if distance < grabDistance && input.isGrabbing {
                 isHeld = true
+            } else {
+                return
             }
-        }
-
-        guard isHeld else {
+        } else if !input.isGrabbing {
+            resetToRest()
             return
         }
 

@@ -73,6 +73,8 @@ final class HandTrackingInputGateway: InputGateway {
             state.gesture = .guardPose
         }
 
+        state.isGrabbing = isPinchGesture(anchor: anchor)
+
         latest = state
         lastPose = pose
         lastTimestamp = now
@@ -81,5 +83,22 @@ final class HandTrackingInputGateway: InputGateway {
     private func position(from matrix: simd_float4x4) -> simd_float3 {
         let column = matrix.columns.3
         return [column.x, column.y, column.z]
+    }
+
+    private func isPinchGesture(anchor: HandAnchor) -> Bool {
+        guard let skeleton = anchor.handSkeleton else { return false }
+        let transforms = skeleton.jointTransforms
+        guard let thumbTransform = transforms[.thumbTip],
+              let indexTransform = transforms[.indexFingerTip] else {
+            return false
+        }
+        let thumbPosition = SIMD3<Float>(thumbTransform.columns.3.x,
+                                         thumbTransform.columns.3.y,
+                                         thumbTransform.columns.3.z)
+        let indexPosition = SIMD3<Float>(indexTransform.columns.3.x,
+                                         indexTransform.columns.3.y,
+                                         indexTransform.columns.3.z)
+        let delta = indexPosition - thumbPosition
+        return simd_length(delta) < 0.035
     }
 }
