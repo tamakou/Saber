@@ -20,8 +20,10 @@ final class SaberEntity {
     private let bladeRadius: Float = 0.015
     private let hiltLength: Float = 0.18
     private let hiltRadius: Float = 0.025
+    private let restPosition = SIMD3<Float>(0, 0.9, -1.0)
 
     private var lastHitTimestamp: TimeInterval = 0
+    private var isHeld = false
 
     init() {
         saberRoot.name = "PlayerSaberRoot"
@@ -47,6 +49,7 @@ final class SaberEntity {
 
         saberRoot.addChild(hiltEntity)
         saberRoot.addChild(bladeEntity)
+        saberRoot.position = restPosition
     }
 
     func attach(to parent: Entity) {
@@ -55,8 +58,15 @@ final class SaberEntity {
     }
 
     func update(with input: PlayerInputState) {
+        if !isHeld && input.isPinching {
+            isHeld = true
+        }
+
+        guard isHeld else {
+            return
+        }
+
         var handTransform = Transform(matrix: input.pose)
-        // Offset so the hilt base sits at the user's palm
         let gripOffset = SIMD3<Float>(0, -hiltLength / 2, 0)
         handTransform.translation += handTransform.rotation.act(gripOffset)
         saberRoot.transform = handTransform
