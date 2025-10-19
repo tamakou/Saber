@@ -17,6 +17,7 @@ struct BattleUpdateResult {
 @MainActor
 final class BattleCoordinator {
 
+    private let worldAnchor = AnchorEntity(.world)
     private let rootEntity = Entity()
     private let saber = SaberEntity()
     private let enemy = EnemyEntity()
@@ -39,10 +40,12 @@ final class BattleCoordinator {
 
         saber.attach(to: rootEntity)
         enemy.attach(to: rootEntity)
+
+        worldAnchor.addChild(rootEntity)
     }
 
     var sceneRoot: Entity {
-        rootEntity
+        worldAnchor
     }
 
     func update(deltaTime: TimeInterval, input: PlayerInputState) -> BattleUpdateResult {

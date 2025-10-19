@@ -32,10 +32,12 @@ struct ImmersiveBattleView: View {
             lastUpdate = now
             let input = coordinator.latestInputState()
             let result = battleCoordinator.update(deltaTime: delta, input: input)
-            appState.combatContext = result.context
-            appState.activeCombatPhase = result.context.phase
-            appState.lastInputLatency = result.inputLatency
-            MetricLogger.shared.recordFrame(deltaTime: delta, inputLatency: result.inputLatency, phase: result.context.phase)
+            Task { @MainActor in
+                appState.combatContext = result.context
+                appState.activeCombatPhase = result.context.phase
+                appState.lastInputLatency = result.inputLatency
+                MetricLogger.shared.recordFrame(deltaTime: delta, inputLatency: result.inputLatency, phase: result.context.phase)
+            }
         }
     }
 }
