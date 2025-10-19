@@ -21,7 +21,7 @@ final class SaberEntity {
     private let hiltLength: Float = 0.18
     private let hiltRadius: Float = 0.025
     private let restPosition = SIMD3<Float>(0, 0.9, -1.0)
-    private let grabDistance: Float = 0.25
+    private let grabDistance: Float = 0.35
 
     private var lastHitTimestamp: TimeInterval = 0
     private var isHeld = false
@@ -61,14 +61,17 @@ final class SaberEntity {
     func update(with input: PlayerInputState) {
         var handTransform = Transform(matrix: input.pose)
         let handPosition = handTransform.translation
+        let saberWorldPosition = worldPosition()
 
         if !isHeld {
-            let distance = simd_length(handPosition - restPosition)
+            let distance = simd_length(handPosition - saberWorldPosition)
             if distance < grabDistance {
                 isHeld = true
-            } else {
-                return
             }
+        }
+
+        guard isHeld else {
+            return
         }
 
         let gripOffset = SIMD3<Float>(0, -hiltLength / 2, 0)
@@ -93,5 +96,14 @@ final class SaberEntity {
     private func tipWorldPosition() -> SIMD3<Float> {
         let localTip = SIMD3<Float>(0, hiltLength + bladeLength, 0)
         return saberRoot.convert(position: localTip, to: nil)
+    }
+
+    func resetToRest() {
+        isHeld = false
+        saberRoot.transform = .init(translation: restPosition)
+    }
+
+    private func worldPosition() -> SIMD3<Float> {
+        saberRoot.convert(position: .zero, to: nil)
     }
 }

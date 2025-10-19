@@ -91,5 +91,6 @@ final class BattleCoordinator {
         combatSystem = DefaultCombatSystem()
         enemy.reset()
         saber.resetCooldown()
+        saber.resetToRest()
     }
 }
