@@ -19,5 +19,7 @@
 			</array>
 		</dict>
 	</dict>
+	<key>NSHandsTrackingUsageDescription</key>
+	<string>Hand tracking is required to align the lightsaber with your gestures.</string>
 </dict>
 </plist>
