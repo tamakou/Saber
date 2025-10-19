@@ -21,6 +21,7 @@ final class SaberEntity {
     private let hiltLength: Float = 0.18
     private let hiltRadius: Float = 0.025
     private let restPosition = SIMD3<Float>(0, 0.9, -1.0)
+    private let grabDistance: Float = 0.25
 
     private var lastHitTimestamp: TimeInterval = 0
     private var isHeld = false
@@ -58,15 +59,18 @@ final class SaberEntity {
     }
 
     func update(with input: PlayerInputState) {
-        if !isHeld && input.isPinching {
-            isHeld = true
-        }
-
-        guard isHeld else {
-            return
-        }
-
         var handTransform = Transform(matrix: input.pose)
+        let handPosition = handTransform.translation
+
+        if !isHeld {
+            let distance = simd_length(handPosition - restPosition)
+            if distance < grabDistance {
+                isHeld = true
+            } else {
+                return
+            }
+        }
+
         let gripOffset = SIMD3<Float>(0, -hiltLength / 2, 0)
         handTransform.translation += handTransform.rotation.act(gripOffset)
         saberRoot.transform = handTransform
