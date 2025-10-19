@@ -17,7 +17,7 @@ struct BattleUpdateResult {
 @MainActor
 final class BattleCoordinator {
 
-    private let worldAnchor = AnchorEntity(.world)
+    private let worldAnchor: AnchorEntity
     private let rootEntity = Entity()
     private let saber = SaberEntity()
     private let enemy = EnemyEntity()
@@ -26,6 +26,7 @@ final class BattleCoordinator {
     private var previousPhase: CombatPhase = .idle
 
     init() {
+        worldAnchor = AnchorEntity(world: float4x4(diagonal: SIMD4<Float>(1, 1, 1, 1)))
         rootEntity.name = "BattleRoot"
 
         let floorMesh = MeshResource.generatePlane(width: 3, depth: 3)

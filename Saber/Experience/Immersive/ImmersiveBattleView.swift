@@ -31,8 +31,8 @@ struct ImmersiveBattleView: View {
             let delta = now.timeIntervalSince(lastUpdate)
             lastUpdate = now
             let input = coordinator.latestInputState()
-            let result = battleCoordinator.update(deltaTime: delta, input: input)
-            Task { @MainActor in
+            DispatchQueue.main.async {
+                let result = battleCoordinator.update(deltaTime: delta, input: input)
                 appState.combatContext = result.context
                 appState.activeCombatPhase = result.context.phase
                 appState.lastInputLatency = result.inputLatency
