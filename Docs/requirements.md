@@ -14,7 +14,7 @@
 
 ## 3. Target Platform & Hardware
 - **Operating system:** visionOS 26 (build for visionOS 26 SDK; maintain fallback plans for 2.x users if feasible).  
-- **Hardware:** Apple Vision Pro with hand tracking and optional accessories (PlayStation VR2 Sense controllers, gamepad, keyboard). Support standing room-scale and seated play.
+- **Hardware:** Apple Vision Pro leveraging built-in hand tracking sensors. Support standing room-scale and seated play without external accessories.
 - **Performance target:** 90 Hz rendering for input-responsive combat; allow 96 Hz on ProMotion if scene complexity permits.
 
 ## 4. Design Pillars
@@ -48,8 +48,8 @@
 ## 7. Interaction & Controls
 - **Hand/Gesture Tracking:** Leverage 90 Hz hand tracking improvements in visionOS 26 for low-latency blade control and gesture recognition.  
 - **Eye Interaction:** Use Look-to-Scroll paradigms for menus; avoid accidental activation by requiring gentle pinch confirm.  
-- **Controller Support:** Implement Game Controller framework updates for PlayStation VR2 Sense controllers (dual wield, haptics, adaptive triggers). Provide fallback for standard Bluetooth gamepads.  
-- **Haptics:** Use spatial audio + controller vibration (when available) to convey hits; fallback to audio cues for hand-tracking-only mode.  
+- **Controller Support:** Not applicable for MVP; focus on hand tracking gestures only.  
+- **Haptics:** Use spatial audio cues to convey hits; emphasize audio feedback to compensate for lack of controller vibration.  
 - **Comfort:** Offer seated mode, boundary visualization, and travel mode compatibility checks.
 
 ## 8. Spatial UX & Presentation
@@ -64,7 +64,7 @@
 
 ## 10. Technical Requirements & Stack
 - **Languages:** Swift 6 for app code, small C++ modules if low-level Metal optimizations required.  
-- **Frameworks:** RealityKit (volumetric rendering, physics), ARKit (plane/room understanding, accessory anchors), SwiftUI (volumetric UI), TabletopKit for spatial accessory integration, Game Controller framework (PSVR2 Sense).  
+- **Frameworks:** RealityKit (volumetric rendering, physics), ARKit (plane/room understanding, hand tracking), SwiftUI (volumetric UI).  
 - **Tools:** Xcode 26 (visionOS 26 SDK), Reality Composer Pro for scene authoring, Motion capture pipeline (Blender + USDZ export).  
 - **Build & CI:** Swift Package Manager; GitHub Actions for lint/build/test matrix (visionOS simulator).  
 - **Analytics:** Lightweight in-app logging with privacy-friendly event batching (opt-in).  
@@ -91,7 +91,7 @@
 ## 14. Accelerated Delivery Roadmap (Indicative)
 - **Week 0-1:** Finalize requirements, set up Xcode 26 workspace, CI, and core modules.  
 - **Week 2-4:** Prototype saber tracking, enemy AI sandbox, basic UI volumes.  
-- **Week 5-6:** Implement PSVR2 Sense support, combat feel tuning, VFX passes.  
+- **Week 5-6:** Polish hand-tracking gestures, combat feel tuning, VFX passes.  
 - **Week 7-8:** Build tutorial dojo, add audio system, integrate scoring and progression.  
 - **Week 9:** Performance optimization, QA pass on hardware, accessibility tweaks.  
 - **Week 10:** Content polish (animations, shaders, VO), prepare app metadata.  
@@ -100,7 +100,7 @@
 
 ## 15. Risks & Mitigations
 - **IP Similarity:** Maintain generic sci-fi aesthetic; legal review before launch.  
-- **Tracking Reliability:** Provide fallback gestures, recalibration prompts, and PSVR2 controller option.  
+- **Tracking Reliability:** Provide fallback gestures, recalibration prompts, and visual aids for hand-tracking edge cases.  
 - **Scope Creep:** Lock MVP feature set; backlog for post-launch updates.  
 - **Performance Regression:** Continuous profiling, automatic alerts in CI when frame timing fails thresholds.  
 - **Solo Developer Bandwidth:** Time-box features, leverage asset marketplaces, automate build/test.
@@ -117,4 +117,3 @@
 2. Apple Developer. "What's new in visionOS 26." Accessed October 19, 2025.  
 3. MacRumors. "Apple releases visionOS 26 with persistent widgets, lifelike Personas, and spatial scenes for Vision Pro." Published September 15, 2025.  
 4. The Verge. "Apple's visionOS 26 adds PSVR2 controller support and spatial widgets to the Vision Pro." Published June 9, 2025.
-

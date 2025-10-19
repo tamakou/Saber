@@ -30,7 +30,7 @@ struct ImmersiveBattleView: View {
             let now = Date()
             let delta = now.timeIntervalSince(lastUpdate)
             lastUpdate = now
-            let input = coordinator.inputGateway.latestState()
+            let input = coordinator.latestInputState()
             let result = battleCoordinator.update(deltaTime: delta, input: input)
             appState.combatContext = result.context
             appState.activeCombatPhase = result.context.phase

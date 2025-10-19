@@ -12,7 +12,7 @@ Target sprint window: Week 0-1 (per requirements roadmap)
 ### Chapter 1: プロジェクト設定整合
 - Bundle identifier、deployment target、architecture (visionOS 26、Arm64) を確認し、Info.plist と build settings に反映する。
 - RealityKit、SwiftUI、Metal を有効化し、SceneKit / legacy ARKit 依存を排除する。
-- 90 Hz ハンドトラッキングおよび PS VR2 Sense controller を想定した capability フラグ (手入力、アクセサリアクセス) を確認。
+- 90 Hz ハンドトラッキングに必要な capability フラグ (手入力、空間センサーアクセス) を確認。
 
 ### Chapter 2: ディレクトリ & モジュール構成
 - `Saber` Swift package/target 内に Core (基盤サービス)、Features (機能別)、Experience (UI/RealityView) のディレクトリを作成。
@@ -20,8 +20,8 @@ Target sprint window: Week 0-1 (per requirements roadmap)
 - 自動テストを `SaberTests` 内にレイヤ別ファイルで追加できる命名規則 (`*_Tests.swift`) を定義。
 
 ### Chapter 3: 入力基盤仕様
-- RealityKit.Input と GameController framework を抽象化する `InputGateway` プロトコルを設計し、HandTracking / PSVR2 実装クラスで実装する。
-- プレイヤー状態は `PlayerInputState` 構造体で姿勢、ジェスチャー、ボタン状態を保持する。
+- RealityKit.Input ベースで手の姿勢と速度を取り扱う `InputGateway` プロトコルを設計する。
+- プレイヤー状態は `PlayerInputState` 構造体で姿勢、ジェスチャー、入力タイムスタンプを保持する。
 - 60 fps 以上を維持するため、毎フレームの処理コスト計測 (os_signpost または MetricKit) の導入方針を決める。
 
 ### Chapter 4: ECS 戦闘フレーム仕様
@@ -32,7 +32,7 @@ Target sprint window: Week 0-1 (per requirements roadmap)
 ### Chapter 5: QA & オペレーション
 - コードレビュー時のチェックリスト (非推奨 API 使用禁止、60 fps 検証、空間 UI ガイドライン遵守) を策定。
 - GitHub Actions での将来 CI 叩き台: `xcodebuild -scheme Saber -destination 'platform=visionOS' clean test` を nightly 実行する方針。
-- 手動 QA プラン: ハンドトラッキング環境/PSVR2 Sense controller/低照度など代表シナリオでの動作確認項目を列挙。
+- 手動 QA プラン: ハンドトラッキング環境 (明所/低照度、指輪などの装飾ありなし) での動作確認項目を列挙。
 
 ## M1 Exit Criteria
 - 上記章の仕様が Docs 配下にコミットされ、レビュー済みである。

@@ -3,7 +3,6 @@
 ## Prerequisites
 - Xcode 16 with visionOS 26 SDK.
 - Apple Vision Pro on visionOS 26 paired via Xcode.
-- Optional: PS VR2 Sense controllers on latest firmware.
 
 ## Build & Deploy
 1. Open `Saber.xcodeproj` in Xcode 16.
@@ -13,9 +12,8 @@
 
 ## During Session
 - Observe the Root window HUD for input status and latency.
-- Enter the immersive space and confirm the duel loop activates.
-- Test hand-only control, then press **Pair PSVR2 Sense** to validate controller mode.
-- Play at least 5 minutes, logging notable events or hitches.
+- Enter the immersive space and confirm the duel loop activates using hand tracking.
+- Play at least 5 minutes, logging notable events or hitches; test in varied room lighting and with/without hand accessories.
 
 ## Log Export
 1. Quit the app on Vision Pro (Digital Crown double tap, swipe up).
@@ -25,7 +23,7 @@
 
 ## Pass/Fail Criteria
 - No crashes during the 5-minute session.
-- HUD latency < 25 ms (hands) and < 15 ms (PSVR2).
+- HUD latency < 25 ms with consistent gesture recognition.
 - Collision sparks + audio trigger on every saber impact.
 - `frame_metrics.log` contains continuous sampling without gaps > 0.5 s.
 

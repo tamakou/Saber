@@ -12,7 +12,7 @@ import Observation
 @MainActor
 final class RootCoordinator {
 
-    private(set) var inputGateway: any InputGateway = HandTrackingInputGateway()
+    private let inputGateway: any InputGateway = HandTrackingInputGateway()
 
     func startInputPipeline() async -> Bool {
         await inputGateway.start()
@@ -22,19 +22,7 @@ final class RootCoordinator {
         inputGateway.stop()
     }
 
-    func swapToPSVR2IfAvailable() {
-        if SenseControllerInputGateway.isControllerAvailable {
-            inputGateway.stop()
-            inputGateway = SenseControllerInputGateway()
-            Task { await inputGateway.start() }
-        } else {
-            useHandTracking()
-        }
-    }
-
-    func useHandTracking() {
-        inputGateway.stop()
-        inputGateway = HandTrackingInputGateway()
-        Task { await inputGateway.start() }
+    func latestInputState() -> PlayerInputState {
+        inputGateway.latestState()
     }
 }

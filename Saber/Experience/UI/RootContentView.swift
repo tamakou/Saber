@@ -32,49 +32,40 @@ struct RootContentView: View {
         })
         .toolbar {
             ToolbarItemGroup(placement: .bottomOrnament) {
-                VStack(spacing: 16) {
+                VStack(spacing: 12) {
                     BattleHUD()
 
-                    VStack(spacing: 12) {
-                        Button {
-                            isExpanded.toggle()
-                        } label: {
-                            Text(isExpanded ? "Scale Reset" : "Scale Up")
-                        }
-                        .buttonStyle(.borderedProminent)
-
-                        Button {
-                            coordinator.swapToPSVR2IfAvailable()
-                        } label: {
-                            Text("Pair PSVR2 Sense")
-                        }
-                        .buttonStyle(.bordered)
-
-                        pipelineStatusPill
-
-                        ImmersiveSpaceToggle()
+                    Button {
+                        isExpanded.toggle()
+                    } label: {
+                        Text(isExpanded ? "Scale Reset" : "Scale Up")
                     }
+                    .buttonStyle(.borderedProminent)
+
+                    inputPipelineStatusLabel
+
+                    ImmersiveSpaceToggle()
                 }
                 .padding(.vertical, 16)
             }
         }
     }
 
-    private var pipelineStatusPill: some View {
+    private var inputPipelineStatusLabel: some View {
         let statusText: String
         let color: Color
         switch appState.inputPipelineStatus {
         case .stopped:
-            statusText = "Input: Stopped"
+            statusText = "Hand Tracking: Stopped"
             color = .gray
         case .starting:
-            statusText = "Input: Starting..."
+            statusText = "Hand Tracking: Starting..."
             color = .orange
         case .running:
-            statusText = "Input: Live"
+            statusText = "Hand Tracking: Live"
             color = .green
         case .failed:
-            statusText = "Input: Failed"
+            statusText = "Hand Tracking: Failed"
             color = .red
         }
         return Label(statusText, systemImage: "waveform.path.ecg")
