@@ -7,7 +7,7 @@
 
 import Foundation
 import RealityKit
-import SwiftUI
+import UIKit
 import simd
 
 @MainActor
@@ -29,7 +29,7 @@ final class SaberEntity {
 
         // Hilt
         let hiltMesh = MeshResource.generateCylinder(height: hiltLength, radius: hiltRadius)
-        var hiltMaterial = SimpleMaterial(color: .color(Color(white: 0.15)), roughness: 0.3, isMetallic: true)
+        var hiltMaterial = SimpleMaterial(color: .init(tint: .init(white: 0.15, alpha: 1.0)), roughness: 0.3, isMetallic: true)
         
         hiltEntity = ModelEntity(mesh: hiltMesh, materials: [hiltMaterial])
         hiltEntity.name = "PlayerSaberHilt"
@@ -37,9 +37,9 @@ final class SaberEntity {
 
         // Blade
         let bladeMesh = MeshResource.generateBox(size: [bladeRadius * 2, bladeLength, bladeRadius * 2])
-        let emissiveColor = Color(red: 0.35, green: 0.9, blue: 1.0)
-        var bladeMaterial = SimpleMaterial(color: .color(emissiveColor), roughness: 0.05, isMetallic: false)
-        bladeMaterial.emissiveColor = .init(tint: .color(emissiveColor), intensity: 4.0)
+        let emissiveColor = UIColor(red: 0.35, green: 0.9, blue: 1.0, alpha: 1.0)
+        var bladeMaterial = SimpleMaterial(color: .init(tint: emissiveColor), roughness: 0.05, isMetallic: false)
+        bladeMaterial.emissiveColor = .init(tint: emissiveColor, intensity: 4.0)
         bladeEntity = ModelEntity(mesh: bladeMesh, materials: [bladeMaterial])
         bladeEntity.name = "PlayerSaberBlade"
         bladeEntity.position = [0, hiltLength + bladeLength / 2, 0]
