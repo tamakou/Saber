@@ -14,6 +14,7 @@ struct PlayerInputState: Sendable, Equatable {
     var angularVelocity: simd_float3 = .zero
     var gesture: PlayerGesture = .idle
     var primaryButtonPressed: Bool = false
+    var timestamp: Date = .now
 
     enum PlayerGesture: Equatable {
         case idle

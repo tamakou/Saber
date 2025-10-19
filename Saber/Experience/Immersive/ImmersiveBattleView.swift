@@ -13,7 +13,7 @@ struct ImmersiveBattleView: View {
 
     @Environment(AppState.self) private var appState
     @Environment(RootCoordinator.self) private var coordinator
-    @State private var combatSystem = DefaultCombatSystem()
+    @State private var battleCoordinator = BattleCoordinator()
     @State private var lastUpdate = Date()
 
     var body: some View {
@@ -23,13 +23,19 @@ struct ImmersiveBattleView: View {
                     content.add(immersiveEntity)
                 }
             }
+            if battleCoordinator.sceneRoot.parent == nil {
+                content.add(battleCoordinator.sceneRoot)
+            }
         } update: { _ in
             let now = Date()
             let delta = now.timeIntervalSince(lastUpdate)
             lastUpdate = now
             let input = coordinator.inputGateway.latestState()
-            let context = combatSystem.update(with: input, deltaTime: delta)
-            appState.activeCombatPhase = context.phase
+            let result = battleCoordinator.update(deltaTime: delta, input: input)
+            appState.combatContext = result.context
+            appState.activeCombatPhase = result.context.phase
+            appState.lastInputLatency = result.inputLatency
+            MetricLogger.shared.recordFrame(deltaTime: delta, inputLatency: result.inputLatency, phase: result.context.phase)
         }
     }
 }

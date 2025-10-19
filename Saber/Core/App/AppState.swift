@@ -27,6 +27,8 @@ final class AppState {
     var immersiveSpaceState: ImmersiveSpaceState = .closed
     var activeCombatPhase: CombatPhase = .idle
     var inputPipelineStatus: InputPipelineStatus = .stopped
+    var combatContext = CombatContext()
+    var lastInputLatency: TimeInterval = 0
 
     func markImmersiveTransition(isOpen: Bool) {
         immersiveSpaceState = isOpen ? .open : .closed

@@ -32,26 +32,55 @@ struct RootContentView: View {
         })
         .toolbar {
             ToolbarItemGroup(placement: .bottomOrnament) {
-                VStack(spacing: 12) {
-                    Button {
-                        isExpanded.toggle()
-                    } label: {
-                        Text(isExpanded ? "Scale Reset" : "Scale Up")
-                    }
-                    .buttonStyle(.borderedProminent)
+                VStack(spacing: 16) {
+                    BattleHUD()
 
-                    Button {
-                        coordinator.swapToPSVR2IfAvailable()
-                    } label: {
-                        Text("Pair PSVR2 Sense")
-                    }
-                    .buttonStyle(.bordered)
+                    VStack(spacing: 12) {
+                        Button {
+                            isExpanded.toggle()
+                        } label: {
+                            Text(isExpanded ? "Scale Reset" : "Scale Up")
+                        }
+                        .buttonStyle(.borderedProminent)
 
-                    ImmersiveSpaceToggle()
+                        Button {
+                            coordinator.swapToPSVR2IfAvailable()
+                        } label: {
+                            Text("Pair PSVR2 Sense")
+                        }
+                        .buttonStyle(.bordered)
+
+                        pipelineStatusPill
+
+                        ImmersiveSpaceToggle()
+                    }
                 }
                 .padding(.vertical, 16)
             }
         }
+    }
+
+    private var pipelineStatusPill: some View {
+        let statusText: String
+        let color: Color
+        switch appState.inputPipelineStatus {
+        case .stopped:
+            statusText = "Input: Stopped"
+            color = .gray
+        case .starting:
+            statusText = "Input: Starting..."
+            color = .orange
+        case .running:
+            statusText = "Input: Live"
+            color = .green
+        case .failed:
+            statusText = "Input: Failed"
+            color = .red
+        }
+        return Label(statusText, systemImage: "waveform.path.ecg")
+            .padding(.horizontal, 12)
+            .padding(.vertical, 8)
+            .background(color.opacity(0.2), in: Capsule())
     }
 }
 

@@ -27,6 +27,14 @@ final class RootCoordinator {
             inputGateway.stop()
             inputGateway = PSVR2SenseInputGateway()
             Task { await inputGateway.start() }
+        } else {
+            useHandTracking()
         }
+    }
+
+    func useHandTracking() {
+        inputGateway.stop()
+        inputGateway = HandTrackingInputGateway()
+        Task { await inputGateway.start() }
     }
 }

@@ -36,6 +36,7 @@ struct SaberApp: App {
                 .onDisappear {
                     appState.markImmersiveTransition(isOpen: false)
                     rootCoordinator.stopInputPipeline()
+                    appState.inputPipelineStatus = .stopped
                 }
         }
         .immersionStyle(selection: .constant(.mixed), in: .mixed)

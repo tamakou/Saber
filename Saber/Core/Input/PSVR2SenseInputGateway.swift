@@ -5,6 +5,7 @@
 //  Created by tamakou on 2025/10/19.
 //
 
+import Foundation
 import GameController
 import simd
 
@@ -16,7 +17,7 @@ final class PSVR2SenseInputGateway: InputGateway {
     }
 
     private var latest = PlayerInputState()
-    private var controllerObservation: NSObjectProtocol?
+    private var controllerObservers: [NSObjectProtocol] = []
 
     func start() async -> Bool {
         latest = PlayerInputState()
@@ -25,10 +26,8 @@ final class PSVR2SenseInputGateway: InputGateway {
     }
 
     func stop() {
-        if let token = controllerObservation {
-            NotificationCenter.default.removeObserver(token)
-        }
-        controllerObservation = nil
+        controllerObservers.forEach(NotificationCenter.default.removeObserver)
+        controllerObservers.removeAll()
         GCController.stopWirelessControllerDiscovery()
         latest = PlayerInputState()
     }
@@ -38,10 +37,22 @@ final class PSVR2SenseInputGateway: InputGateway {
     }
 
     private func registerNotifications() {
-        controllerObservation = NotificationCenter.default.addObserver(forName: .GCControllerDidBecomeCurrent, object: nil, queue: .main) { [weak self] notification in
+        let currentToken = NotificationCenter.default.addObserver(forName: .GCControllerDidBecomeCurrent, object: nil, queue: .main) { [weak self] notification in
             guard let sense = notification.object as? GCController else { return }
             self?.bindInputs(for: sense)
         }
+        controllerObservers.append(currentToken)
+
+        let connectToken = NotificationCenter.default.addObserver(forName: .GCControllerDidConnect, object: nil, queue: .main) { [weak self] notification in
+            guard let sense = notification.object as? GCController else { return }
+            self?.bindInputs(for: sense)
+        }
+        controllerObservers.append(connectToken)
+
+        let disconnectToken = NotificationCenter.default.addObserver(forName: .GCControllerDidDisconnect, object: nil, queue: .main) { [weak self] _ in
+            self?.latest = PlayerInputState()
+        }
+        controllerObservers.append(disconnectToken)
 
         GCController.startWirelessControllerDiscovery {}
         GCController.controllers().forEach(bindInputs(for:))
@@ -55,11 +66,13 @@ final class PSVR2SenseInputGateway: InputGateway {
             self.latest.pose = simd_float4x4(attitude: motion)
             self.latest.angularVelocity = simd_float3(Float(motion.rotationRate.x), Float(motion.rotationRate.y), Float(motion.rotationRate.z))
             self.latest.linearVelocity = simd_float3(Float(motion.userAcceleration.x), Float(motion.userAcceleration.y), Float(motion.userAcceleration.z))
+            self.latest.timestamp = Date()
         }
 
         controller.extendedGamepad?.buttonA.valueChangedHandler = { [weak self] _, _, pressed in
             guard let self else { return }
             self.latest.primaryButtonPressed = pressed
+            self.latest.timestamp = Date()
         }
     }
 }
