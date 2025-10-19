@@ -22,6 +22,7 @@ final class SaberEntity {
     private let hiltRadius: Float = 0.025
     private let restPosition = SIMD3<Float>(0, 0.9, -1.0)
     private let grabDistance: Float = 0.35
+    private let dropDistance: Float = 0.6
 
     private var lastHitTimestamp: TimeInterval = 0
     private var isHeld = false
@@ -63,14 +64,15 @@ final class SaberEntity {
         let handPosition = handTransform.translation
         let saberWorldPosition = worldPosition()
 
+        let distance = simd_length(handPosition - saberWorldPosition)
+
         if !isHeld {
-            let distance = simd_length(handPosition - saberWorldPosition)
-            if distance < grabDistance && input.isGrabbing {
+            if distance < grabDistance {
                 isHeld = true
             } else {
                 return
             }
-        } else if !input.isGrabbing {
+        } else if distance > dropDistance {
             resetToRest()
             return
         }

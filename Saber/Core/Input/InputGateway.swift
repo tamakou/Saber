@@ -15,7 +15,6 @@ struct PlayerInputState: Sendable, Equatable {
     var gesture: PlayerGesture = .idle
     var primaryButtonPressed: Bool = false
     var timestamp: Date = .now
-    var isGrabbing: Bool = false
 
     enum PlayerGesture: Equatable {
         case idle
