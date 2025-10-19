@@ -32,7 +32,7 @@ struct ImmersiveBattleView: View {
                 appState.combatContext = result.context
                 appState.activeCombatPhase = result.context.phase
                 appState.lastInputLatency = result.inputLatency
-                MetricLogger.shared.recordFrame(deltaTime: delta, inputLatency: result.inputLatency, phase: result.context.phase)
+                MetricLogger.shared.recordFrame(deltaTime: result.deltaTime, inputLatency: result.inputLatency, phase: result.context.phase)
             }
         }
     }

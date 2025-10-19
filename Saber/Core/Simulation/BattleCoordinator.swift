@@ -12,6 +12,7 @@ import simd
 struct BattleUpdateResult {
     let context: CombatContext
     let inputLatency: TimeInterval
+    let deltaTime: TimeInterval
 }
 
 @MainActor
@@ -82,7 +83,7 @@ final class BattleCoordinator {
         previousPhase = context.phase
 
         let latency = Date().timeIntervalSince(input.timestamp)
-        return BattleUpdateResult(context: context, inputLatency: latency)
+        return BattleUpdateResult(context: context, inputLatency: latency, deltaTime: deltaTime)
     }
 
     private func resetBattle() {
