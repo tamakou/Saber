@@ -33,8 +33,12 @@ final class MetricLogger {
         let timestamp = dateFormatter.string(from: Date())
         let line = "\(timestamp),dt=\(deltaTime),latency=\(inputLatency),phase=\(phase)\n"
         if let data = line.data(using: .utf8) {
-            try? fileHandle.seekToEnd()
-            try? fileHandle.write(contentsOf: data)
+            do {
+                try fileHandle.seekToEnd()
+                try fileHandle.write(contentsOf: data)
+            } catch {
+                logger.error("metric write failed: \(error.localizedDescription)")
+            }
         }
     }
 

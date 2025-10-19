@@ -12,7 +12,7 @@ Sprint window: Week 2 (per roadmap)
 
 ### Chapter 1: Input Pipeline
 - Implement `HandTrackingInputGateway` backed by ARKit HandTrackingProvider to stream pose/velocity/gesture samples.
-- Map PS VR2 Sense controllers via GameController.framework inside `PSVR2SenseInputGateway`.
+- Map PS VR2 Sense controllers via GameController.framework inside `SenseControllerInputGateway`.
 - Expose input-source switching and status in RootCoordinator + HUD.
 - Validation targets: 90 Hz hand updates on visionOS 26, PS VR2 Sense pairing and vibration readiness.
 

@@ -23,9 +23,9 @@ final class RootCoordinator {
     }
 
     func swapToPSVR2IfAvailable() {
-        if PSVR2SenseInputGateway.isControllerAvailable {
+        if SenseControllerInputGateway.isControllerAvailable {
             inputGateway.stop()
-            inputGateway = PSVR2SenseInputGateway()
+            inputGateway = SenseControllerInputGateway()
             Task { await inputGateway.start() }
         } else {
             useHandTracking()
