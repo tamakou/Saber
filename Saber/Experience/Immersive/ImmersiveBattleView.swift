@@ -14,8 +14,7 @@ struct ImmersiveBattleView: View {
     @Environment(AppState.self) private var appState
     @Environment(RootCoordinator.self) private var coordinator
     @State private var battleCoordinator = BattleCoordinator()
-    @State private var lastUpdate = Date()
-
+    
     var body: some View {
         RealityView { content in
             if content.entities.isEmpty {
@@ -27,12 +26,9 @@ struct ImmersiveBattleView: View {
                 content.add(battleCoordinator.sceneRoot)
             }
         } update: { _ in
-            let now = Date()
-            let delta = now.timeIntervalSince(lastUpdate)
-            lastUpdate = now
             let input = coordinator.latestInputState()
             DispatchQueue.main.async {
-                let result = battleCoordinator.update(deltaTime: delta, input: input)
+                let result = battleCoordinator.update(with: input)
                 appState.combatContext = result.context
                 appState.activeCombatPhase = result.context.phase
                 appState.lastInputLatency = result.inputLatency

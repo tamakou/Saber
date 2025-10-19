@@ -30,7 +30,7 @@ final class SaberEntity {
         // Hilt
         let hiltMesh = MeshResource.generateCylinder(height: hiltLength, radius: hiltRadius)
         let hiltColor = UIColor(white: 0.2, alpha: 1.0)
-        var hiltMaterial = SimpleMaterial(color: hiltColor, roughness: 0.3, isMetallic: true)
+        let hiltMaterial = SimpleMaterial(color: hiltColor, roughness: 0.3, isMetallic: true)
         
         hiltEntity = ModelEntity(mesh: hiltMesh, materials: [hiltMaterial])
         hiltEntity.name = "PlayerSaberHilt"

@@ -24,6 +24,7 @@ final class BattleCoordinator {
     private var combatSystem = DefaultCombatSystem()
     private var simulationTime: TimeInterval = 0
     private var previousPhase: CombatPhase = .idle
+    private var lastUpdateTime: TimeInterval?
 
     init() {
         worldAnchor = AnchorEntity(world: float4x4(diagonal: SIMD4<Float>(1, 1, 1, 1)))
@@ -49,7 +50,16 @@ final class BattleCoordinator {
         worldAnchor
     }
 
-    func update(deltaTime: TimeInterval, input: PlayerInputState) -> BattleUpdateResult {
+    func update(with input: PlayerInputState) -> BattleUpdateResult {
+        let now = Date.timeIntervalSinceReferenceDate
+        let deltaTime: TimeInterval
+        if let last = lastUpdateTime {
+            deltaTime = now - last
+        } else {
+            deltaTime = 1.0 / 60.0
+        }
+        lastUpdateTime = now
+
         simulationTime += deltaTime
 
         saber.update(with: input)
